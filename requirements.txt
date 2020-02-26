@@ -18,3 +18,9 @@ textblob==0.15.3
 tweepy==3.8.0
 urllib3==1.25.3
 Werkzeug==0.15.6
+rake-nltk==1.0.4
+newsapi-python==0.2.6
+pytrends==3.2.0
+flask-cors=3.0.8
+python-dotenv==0.11.0
+Flask==1.1.1

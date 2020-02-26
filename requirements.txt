@@ -17,6 +17,7 @@ tweepy==3.8.0
 urllib3==1.25.3
 Werkzeug==0.15.6
 rake-nltk==1.0.4
+nltk==3.4.5
 newsapi-python==0.2.6
 pytrends==4.7.2
 Flask-Cors==3.0.8

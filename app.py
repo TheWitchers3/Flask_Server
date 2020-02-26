@@ -6,9 +6,7 @@ from flask import request
 from flask import jsonify
 import tsaFinal
 from flask_cors import CORS
-import nltk
 
-nltk.download()
 
 dotenv.load_dotenv()
 

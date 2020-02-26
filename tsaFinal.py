@@ -6,9 +6,7 @@ from textblob import TextBlob
 from tweepy import OAuthHandler
 from newsapi import NewsApiClient
 from rake_nltk import Rake
-import nltk
 
-nltk.download()
 
 def clean_tweet(tweet):
     return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t]) |(\w+:\/\/\S+)", " ", tweet).split())

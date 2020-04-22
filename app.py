@@ -7,7 +7,6 @@ from flask import jsonify
 import tsaFinal
 from flask_cors import CORS
 
-
 dotenv.load_dotenv()
 
 CK = os.getenv('CONSUMER_KEY')
@@ -26,6 +25,11 @@ def home():
 def getTrending():
     d=tsaFinal.getTrends()
     return d
+
+@app.route('/notif')
+def getNotified():
+    d=tsaFinal.getNotifyTrends()
+    return jsonify(d)
 
 @app.route('/analyze')
 def analyze():

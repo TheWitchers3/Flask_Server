@@ -6,9 +6,9 @@ from textblob import TextBlob
 from tweepy import OAuthHandler
 from newsapi import NewsApiClient
 from rake_nltk import Rake
-import nltk
+import random
 
-nltk.download()
+
 
 def clean_tweet(tweet):
     return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t]) |(\w+:\/\/\S+)", " ", tweet).split())
@@ -82,6 +82,20 @@ def supreme(s):
     neutweets = [tweet for tweet in tweets if tweet['sentiment'] == 'neutral']
     # print("Neutral tweets percentage: {} % \ ".format(100 * (pneu)))
 
+    """
+    print("\n\nPositive tweets:")
+    for tweet in ptweets[:10]:
+        print(tweet['text'])
+
+    print("\n\nNegative tweets:")
+    for tweet in ntweets[:10]:
+        print(tweet['text'])
+    print("\n\nNeutral tweets:")
+    for tweet in neutweets[:10]:
+        print(tweet['text'])
+    """
+
+    
     newsapi = NewsApiClient(api_key='bb0f664df41346a38b42d10e3682c915')
 
     all_news = newsapi.get_everything(q=s)
@@ -141,6 +155,17 @@ def getAnalysis(query, ck="", cs="", at="", ats=""):
     d = {'positiveTweets': analysis[0], 'pp': analysis[1], 'negativeTweets': analysis[2],
          'np': analysis[3], 'neutralTweets': analysis[4], 'neup': analysis[5], 'intersection': analysis[6], 'truthfulness': analysis[7]}
     return d
+
+
+def getNotifyTrends():
+    pytrends = TrendReq(hl='en-US', tz=360)
+    d = pytrends.trending_searches(pn='india').to_dict()
+    d = d[0]
+    ret_dic = {}
+    for i in d:
+        if i < 10:
+            ret_dic[i + 1] = d[i]
+    return {'notif':list(ret_dic.values())[random.randint(0,9)]}
 
 
 if __name__ == '__main__':

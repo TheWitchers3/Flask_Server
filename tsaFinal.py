@@ -1,13 +1,12 @@
+import random
 import re
 
 import tweepy
+from newsapi import NewsApiClient
 from pytrends.request import TrendReq
+from rake_nltk import Rake
 from textblob import TextBlob
 from tweepy import OAuthHandler
-from newsapi import NewsApiClient
-from rake_nltk import Rake
-import random
-
 
 
 def clean_tweet(tweet):
@@ -70,7 +69,7 @@ def supreme(s):
 
     tweets = get_tweets(query=s, count=200)
 
-    ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive']
+    ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positiv  e']
     ppos = 100 * len(ptweets) / len(tweets)
     # print("Positive tweets percentage: {} %".format(ppos))
 
@@ -95,15 +94,16 @@ def supreme(s):
         print(tweet['text'])
     """
 
-    
     newsapi = NewsApiClient(api_key='bb0f664df41346a38b42d10e3682c915')
 
     all_news = newsapi.get_everything(q=s)
     l1 = all_news.get('articles')
     newsl = []
+    titles = []
     for i in l1:
         if i.get('content'):
             newsl.append(i.get('content'))
+            titles.append(i.get('title').lower())
 
     r = Rake()
 
@@ -114,23 +114,27 @@ def supreme(s):
             l1.append(j)
 
     l = []
-
     if pneg + 0.5 * pneu > 50:
         tweets1 = ntweets[:]
     else:
         tweets1 = tweets[:]
     for i in tweets1:
         l.append(i.get('text'))
+
     l2 = []
     for i in l:
         r.extract_keywords_from_text(i)
         for j in r.get_ranked_phrases():
             l2.append(j)
 
-    intersection = list(set([value for value in l1 if value in l2 and len(value) > 2]))
+    intersection = list(set([value.lower() for value in l1 if value in l2 and len(value) > 2]))
+    titleRank = []
+    for i in titles:
+        titleRank.append(len(set(i.split()) & set(intersection)))
+
     truthfulness = True if len(intersection) > 2 else False
 
-    return ptweets, ppos, ntweets, pneg, neutweets, pneu, intersection, truthfulness
+    return ptweets, ppos, ntweets, pneg, neutweets, pneu, intersection, truthfulness,titles[titleRank.index(max(titleRank))]
 
     # return ppos, pneg, pneu
 
@@ -153,7 +157,8 @@ def getAnalysis(query, ck="", cs="", at="", ats=""):
         print("Error: Authentication Failed")
     analysis = supreme(query)
     d = {'positiveTweets': analysis[0], 'pp': analysis[1], 'negativeTweets': analysis[2],
-         'np': analysis[3], 'neutralTweets': analysis[4], 'neup': analysis[5], 'intersection': analysis[6], 'truthfulness': analysis[7]}
+         'np': analysis[3], 'neutralTweets': analysis[4], 'neup': analysis[5], 'intersection': analysis[6],
+         'truthfulness': analysis[7], 'title': analysis[8]}
     return d
 
 
@@ -165,26 +170,7 @@ def getNotifyTrends():
     for i in d:
         if i < 10:
             ret_dic[i + 1] = d[i]
-    return {'notif':list(ret_dic.values())[random.randint(0,9)]}
+    return {'notif': list(ret_dic.values())[random.randint(0, 9)]}
 
 
-if __name__ == '__main__':
-    consumer_key = '8960pswi0ALmad8bD27Bofh22'
-    consumer_secret = 'hSFcDZUsfwSbn3eutUirambdqLK1dwMyZkL40BAuoYY4mcbLbE'
-    access_token = '934833577803616257-mVf5WjNVNfT2eWmQ4T46N2T2BDFZ1tV'
-    access_token_secret = '5xQVESFc6kGaQSbtdhvew1WPi73Yne1a9lTi62oPrkKba'
-
-    try:
-        auth = OAuthHandler(consumer_key, consumer_secret)
-        auth.set_access_token(access_token, access_token_secret)
-        api = tweepy.API(auth)
-    except:
-        print("Error: Authentication Failed")
-
-    topTrends = getTrends()
-    analysis = supreme(topTrends[0])
-    d = {'positive tweets': analysis[0], 'pp': analysis[1], 'negative tweets': analysis[2],
-         'np': analysis[3], 'neutral tweets': analysis[4], 'neup': analysis[5]}
-    print(d)
-
-#    print(supreme(topTrends[0]))
+print(supreme('corona'))

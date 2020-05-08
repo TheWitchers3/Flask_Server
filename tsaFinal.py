@@ -1,6 +1,6 @@
 import random
 import re
-
+import nltk
 import tweepy
 from newsapi import NewsApiClient
 from pytrends.request import TrendReq
@@ -8,6 +8,7 @@ from rake_nltk import Rake
 from textblob import TextBlob
 from tweepy import OAuthHandler
 
+nltk.download('stopwords')
 
 def clean_tweet(tweet):
     return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t]) |(\w+:\/\/\S+)", " ", tweet).split())

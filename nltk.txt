@@ -1,4 +1,5 @@
 wordnet
 pros_cons
 reuters
-rake_nltk
+rake-nltk
+stopwords

@@ -21,3 +21,4 @@ newsapi-python==0.2.6
 pytrends==4.7.2
 Flask-Cors==3.0.8
 python-dotenv==0.11.0
+rake-nltk==1.0.4

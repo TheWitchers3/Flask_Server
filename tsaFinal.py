@@ -169,7 +169,8 @@ def getAnalysis(query, ck="", cs="", at="", ats=""):
         print("Error: Authentication Failed")
     analysis = supreme(query)
     d = {'positiveTweets': analysis[0], 'pp': analysis[1], 'negativeTweets': analysis[2],
-         'np': analysis[3], 'neutralTweets': analysis[4], 'neup': analysis[5], 'intersection': analysis[6], 'truthfulness': analysis[7]}
+         'np': analysis[3], 'neutralTweets': analysis[4], 'neup': analysis[5], 'intersection': analysis[6],
+         'truthfulness': analysis[7], 'title': analysis[8]}
     return d
 
 

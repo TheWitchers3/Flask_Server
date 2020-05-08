@@ -184,7 +184,7 @@ def getNotifyTrends():
     return {'notif':list(ret_dic.values())[random.randint(0,9)]}
 
 
-if _name_ == '_main_':
+if __name__ == '__main__':
     consumer_key = '8960pswi0ALmad8bD27Bofh22'
     consumer_secret = 'hSFcDZUsfwSbn3eutUirambdqLK1dwMyZkL40BAuoYY4mcbLbE'
     access_token = '934833577803616257-mVf5WjNVNfT2eWmQ4T46N2T2BDFZ1tV'

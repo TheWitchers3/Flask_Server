@@ -8,7 +8,6 @@ from rake_nltk import Rake
 from textblob import TextBlob
 from tweepy import OAuthHandler
 
-nltk.download()
 nltk.download('stopwords')
 nltk.download('punkt')
 

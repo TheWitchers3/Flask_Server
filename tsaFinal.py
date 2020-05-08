@@ -11,6 +11,7 @@ from tweepy import OAuthHandler
 nltk.download('stopwords')
 nltk.download('punkt')
 
+
 def clean_tweet(tweet):
     return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t]) |(\w+:\/\/\S+)", " ", tweet).split())
 
@@ -102,6 +103,13 @@ def supreme(s):
     all_news = newsapi.get_everything(q=s)
     l1 = all_news.get('articles')
     newsl = []
+
+    titles=[]
+    for i in l1:
+        if i.get('content'):
+            newsl.append(i.get('content'))
+            titles.append(i.get('title').lower())
+
     for i in l1:
         if i.get('content'):
             newsl.append(i.get('content'))
@@ -113,6 +121,8 @@ def supreme(s):
         r.extract_keywords_from_text(i)
         for j in r.get_ranked_phrases():
             l1.append(j)
+
+    
 
     l = []
 
@@ -128,10 +138,15 @@ def supreme(s):
         for j in r.get_ranked_phrases():
             l2.append(j)
 
+    
+
     intersection = list(set([value for value in l1 if value in l2 and len(value) > 2]))
+    titleRank = []
+    for i in titles:
+        titleRank.append(len(set(i.split()) & set(intersection)))
     truthfulness = True if len(intersection) > 2 else False
 
-    return ptweets, ppos, ntweets, pneg, neutweets, pneu, intersection, truthfulness
+    return ptweets, ppos, ntweets, pneg, neutweets, pneu, intersection, truthfulness,titles[titleRank.index(max(titleRank))]
 
     # return ppos, pneg, pneu
 
@@ -169,7 +184,7 @@ def getNotifyTrends():
     return {'notif':list(ret_dic.values())[random.randint(0,9)]}
 
 
-if __name__ == '__main__':
+if _name_ == '_main_':
     consumer_key = '8960pswi0ALmad8bD27Bofh22'
     consumer_secret = 'hSFcDZUsfwSbn3eutUirambdqLK1dwMyZkL40BAuoYY4mcbLbE'
     access_token = '934833577803616257-mVf5WjNVNfT2eWmQ4T46N2T2BDFZ1tV'
@@ -187,3 +202,5 @@ if __name__ == '__main__':
     d = {'positive tweets': analysis[0], 'pp': analysis[1], 'negative tweets': analysis[2],
          'np': analysis[3], 'neutral tweets': analysis[4], 'neup': analysis[5]}
     print(d)
+
+#    print(supreme(topTrends[0]))
